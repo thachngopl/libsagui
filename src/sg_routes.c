@@ -30,7 +30,7 @@
 #include <unistd.h>
 #include "sg_macros.h"
 #include "utlist.h"
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include "sg_utils.h"
 #endif
 #include "sg_routes.h"

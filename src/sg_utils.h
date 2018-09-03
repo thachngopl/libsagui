@@ -42,7 +42,7 @@
 
 #define realpath(n, r) _fullpath((r), (n), PATH_MAX)
 
-SG_EXTERN char *strndup(const char *s, size_t n);
+SG__EXTERN char *strndup(const char *s, size_t n);
 
 SG__EXTERN int sg__rename(const char *old, const char *new);
 

@@ -109,7 +109,9 @@ endif ()
 
 include_directories(${SG_INCLUDE_DIR})
 include_directories(${MHD_INCLUDE_DIR})
-include_directories(${PCRE2_INCLUDE_DIR})
+if (SG_PATH_ROUTING)
+    include_directories(${PCRE2_INCLUDE_DIR})
+endif ()
 
 add_subdirectory(src)
 add_subdirectory(examples)
