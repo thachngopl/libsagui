@@ -48,8 +48,8 @@ static struct sg_route *sg__route_new(const char *pattern, char *errmsg, size_t 
         return NULL;
     }
     sg__new(route);
-    off = strlen(pattern) + 2;
-    if (!(route->pattern = sg__malloc(off + 1))) {
+    off = strlen(pattern) + 3;
+    if (!(route->pattern = sg__malloc(off))) {
         sg__free(route);
         oom();
     }
