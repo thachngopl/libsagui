@@ -137,11 +137,15 @@ typedef int (*sg_save_cb)(void *handle, bool overwritten);
  */
 typedef int (*sg_save_as_cb)(void *handle, const char *path, bool overwritten);
 
+#ifdef SG_PATH_ROUTING
+
 /* experimental */
 typedef int (*sg_get_segments_cb)(void *cls, const char *segment);
 
 /* experimental */
 typedef int (*sg_get_vars_cb)(void *cls, const char *name, const char *val);
+
+#endif
 
 /**
  * Returns the library version number.
@@ -1120,6 +1124,8 @@ SG_EXTERN ssize_t sg_httpread_end(bool err);
 
 /** \} */
 
+#ifdef SG_PATH_ROUTING
+
 /* experimental */
 struct sg_route;
 
@@ -1168,6 +1174,8 @@ SG_EXTERN void sg_router_free(struct sg_router *router);
 
 /* experimental */
 SG_EXTERN int sg_router_dispatch(struct sg_router *router, const char *path, void *user_data);
+
+#endif
 
 #ifdef __cplusplus
 }
