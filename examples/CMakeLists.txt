@@ -71,7 +71,8 @@ if (SG_BUILD_EXAMPLES)
         list(APPEND SG_EXAMPLES
                 router_simple
                 router_segments
-                router_vars)
+                router_vars
+                router_srv)
     endif ()
     set(SG_EXAMPLES ${SG_EXAMPLES} PARENT_SCOPE)
     list(APPEND _libs sagui)
