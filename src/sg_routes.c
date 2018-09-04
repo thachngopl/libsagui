@@ -187,27 +187,27 @@ void *sg_route_user_data(struct sg_route *route) {
     return route->user_data;
 }
 
-int sg_routes_add2(struct sg_route **routes, const char *pattern, char *errmsg, size_t errlen,
+int sg_routes_add2(struct sg_route **routes, struct sg_route **route, const char *pattern, char *errmsg, size_t errlen,
                    sg_route_cb cb, void *cls) {
-    struct sg_route *route;
-    if (!routes || !pattern || !errmsg || (errlen < 1) || !cb)
+    if (!routes || !route || !pattern || !errmsg || (errlen < 1) || !cb)
         return EINVAL;
-    LL_FOREACH(*routes, route) {
-        if (strncmp(pattern, route->pattern + 1, strlen(pattern)) == 0)
+    LL_FOREACH(*routes, *route) {
+        if (strncmp(pattern, (*route)->pattern + 1, strlen(pattern)) == 0)
             return EALREADY;
     }
-    if (!(route = sg__route_new(pattern, errmsg, errlen, cb, cls)))
+    if (!(*route = sg__route_new(pattern, errmsg, errlen, cb, cls)))
         return -1;
-    LL_APPEND(*routes, route);
+    LL_APPEND(*routes, *route);
     return 0;
 }
 
 int sg_routes_add(struct sg_route **routes, const char *pattern, sg_route_cb cb, void *cls) {
+    struct sg_route *route;
     char *err;
     int ret;
 #define SG__ERR_SIZE 256
     sg__alloc(err, SG__ERR_SIZE);
-    if ((ret = sg_routes_add2(routes, pattern, err, SG__ERR_SIZE, cb, cls)) != 0)
+    if ((ret = sg_routes_add2(routes, &route, pattern, err, SG__ERR_SIZE, cb, cls)) != 0)
 #undef SG__ERR_SIZE
         sg__routes_err_cb(cls, err);
     sg__free(err);

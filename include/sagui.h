@@ -1151,8 +1151,8 @@ SG_EXTERN int sg_route_get_vars(struct sg_route *route, sg_get_vars_cb cb, void 
 SG_EXTERN void *sg_route_user_data(struct sg_route *route);
 
 /* experimental */
-SG_EXTERN int sg_routes_add2(struct sg_route **routes, const char *pattern, char *errmsg, size_t errlen,
-                             sg_route_cb cb, void *cls);
+SG_EXTERN int sg_routes_add2(struct sg_route **routes, struct sg_route **route, const char *pattern,
+                             char *errmsg, size_t errlen, sg_route_cb cb, void *cls);
 
 /* experimental */
 SG_EXTERN int sg_routes_add(struct sg_route **routes, const char *pattern, sg_route_cb cb, void *cls);
