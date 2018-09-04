@@ -1164,9 +1164,6 @@ SG_EXTERN int sg_routes_clear(struct sg_route **routes);
 struct sg_router;
 
 /* experimental */
-SG_EXTERN struct sg_router *sg_router_new2(struct sg_route *routes, sg_err_cb err_cb, void *cls);
-
-/* experimental */
 SG_EXTERN struct sg_router *sg_router_new(struct sg_route *routes);
 
 /* experimental */

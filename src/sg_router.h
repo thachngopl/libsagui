@@ -33,8 +33,6 @@
 
 struct sg_router {
     struct sg_route *routes;
-    sg_err_cb err_cb;
-    void *err_cls;
 };
 
 #endif /* SG_ROUTER_H */

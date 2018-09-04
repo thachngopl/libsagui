@@ -25,8 +25,6 @@
  * along with Sagui library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-#include <string.h>
 #include <errno.h>
 #include "sg_macros.h"
 #include "utlist.h"
@@ -34,21 +32,15 @@
 #include "sg_router.h"
 #include "sagui.h"
 
-struct sg_router *sg_router_new2(struct sg_route *routes, sg_err_cb err_cb, void *cls) {
+struct sg_router *sg_router_new(struct sg_route *routes) {
     struct sg_router *router;
-    if (!routes || !err_cb) {
+    if (!routes) {
         errno = EINVAL;
         return NULL;
     }
     sg__new(router);
     router->routes = routes;
-    router->err_cb = err_cb;
-    router->err_cls = cls;
     return router;
-}
-
-struct sg_router *sg_router_new(struct sg_route *routes) {
-    return sg_router_new2(routes, sg__routes_err_cb, NULL);
 }
 
 void sg_router_free(struct sg_router *router) {
