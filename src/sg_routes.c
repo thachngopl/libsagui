@@ -193,7 +193,7 @@ int sg_routes_add2(struct sg_route **routes, const char *pattern, char *errmsg, 
     if (!routes || !pattern || !errmsg || (errlen < 1) || !cb)
         return EINVAL;
     LL_FOREACH(*routes, route) {
-        if (strcmp(pattern, route->pattern) == 0)
+        if (strncmp(pattern, route->pattern + 1, strlen(pattern)) == 0)
             return EALREADY;
     }
     if (!(route = sg__route_new(pattern, errmsg, errlen, cb, cls)))
