@@ -108,12 +108,25 @@ void *sg_route_handle(struct sg_route *route) {
     return route->re;
 }
 
-const char *sg_route_pattern(struct sg_route *route) {
+const char *sg_route_pattern_raw(struct sg_route *route) {
     if (!route) {
         errno = EINVAL;
         return NULL;
     }
     return route->pattern;
+}
+
+char *sg_route_pattern(struct sg_route *route) {
+    char *pattern;
+    if (!route) {
+        errno = EINVAL;
+        return NULL;
+    }
+    if (!(pattern = strndup(route->pattern + 1, strlen(route->pattern) - 2))) {
+        errno = ENOMEM;
+        return NULL;
+    }
+    return pattern;
 }
 
 const char *sg_route_path(struct sg_route *route) {

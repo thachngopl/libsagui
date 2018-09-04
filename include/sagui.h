@@ -1136,7 +1136,10 @@ typedef void (*sg_route_cb)(void *cls, struct sg_route *route);
 SG_EXTERN void *sg_route_handle(struct sg_route *route);
 
 /* experimental */
-SG_EXTERN const char *sg_route_pattern(struct sg_route *route);
+SG_EXTERN const char *sg_route_pattern_raw(struct sg_route *route);
+
+/* experimental */
+SG_EXTERN char *sg_route_pattern(struct sg_route *route);
 
 /* experimental */
 SG_EXTERN const char *sg_route_path(struct sg_route *route);
