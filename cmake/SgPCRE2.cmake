@@ -102,7 +102,7 @@ ExternalProject_Add(${PCRE2_FULL_NAME}
 
 ExternalProject_Get_Property(${PCRE2_FULL_NAME} INSTALL_DIR)
 set(PCRE2_INCLUDE_DIR ${INSTALL_DIR}/include)
-if (MINGW)
+if (WIN32 AND (CMAKE_BUILD_TYPE MATCHES "[Dd]ebug|DEBUG"))
     set(PCRE2_SUFFIX "d")
 endif ()
 set(PCRE2_ARCHIVE_LIB ${INSTALL_DIR}/lib/lib${PCRE2_NAME}-8${PCRE2_SUFFIX}.a)
