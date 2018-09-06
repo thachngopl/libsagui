@@ -35,7 +35,7 @@
 struct sg_route {
     struct sg_route *next;
     pcre2_code *re;
-    pcre2_match_data *match_data;
+    pcre2_match_data *match;
     PCRE2_SIZE *ovector;
     sg_route_cb cb;
     void *cls, *user_data;

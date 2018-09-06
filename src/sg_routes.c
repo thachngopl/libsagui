@@ -78,7 +78,7 @@ static struct sg_route *sg__route_new(const char *pattern, char *errmsg, size_t 
     }
 #endif
 #undef SG__ERR_SIZE
-    if (!(route->match_data = pcre2_match_data_create_from_pattern(route->re, NULL))) {
+    if (!(route->match = pcre2_match_data_create_from_pattern(route->re, NULL))) {
         strncpy(errmsg, _("Cannot allocate match data from the pattern.\n"), errlen);
         sg__route_free(route);
         return NULL;
@@ -89,7 +89,7 @@ static struct sg_route *sg__route_new(const char *pattern, char *errmsg, size_t 
 }
 
 static void sg__route_free(struct sg_route *route) {
-    pcre2_match_data_free(route->match_data);
+    pcre2_match_data_free(route->match);
     pcre2_code_free(route->re);
     sg__free(route->pattern);
     sg__free(route);
@@ -106,6 +106,14 @@ void *sg_route_handle(struct sg_route *route) {
         return NULL;
     }
     return route->re;
+}
+
+void *sg_route_match(struct sg_route *route) {
+    if (!route) {
+        errno = EINVAL;
+        return NULL;
+    }
+    return route->match;
 }
 
 const char *sg_route_pattern_raw(struct sg_route *route) {
@@ -145,7 +153,7 @@ int sg_route_get_segments(struct sg_route *route, sg_get_segments_cb cb, void *c
         return EINVAL;
     if (route->rc < 0)
         return 0;
-    route->ovector = pcre2_get_ovector_pointer(route->match_data);
+    route->ovector = pcre2_get_ovector_pointer(route->match);
     for (int i = 1; i < route->rc; i++) {
         r = i << 1;
         off = route->ovector[r];
@@ -170,7 +178,7 @@ int sg_route_get_vars(struct sg_route *route, sg_get_vars_cb cb, void *cls) {
         return EINVAL;
     if (route->rc < 0)
         return 0;
-    route->ovector = pcre2_get_ovector_pointer(route->match_data);
+    route->ovector = pcre2_get_ovector_pointer(route->match);
     pcre2_pattern_info(route->re, PCRE2_INFO_NAMECOUNT, &cnt);
     if (cnt == 0)
         return 0;

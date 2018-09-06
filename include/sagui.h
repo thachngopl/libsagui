@@ -1133,10 +1133,13 @@ struct sg_route;
 typedef void (*sg_route_cb)(void *cls, struct sg_route *route);
 
 /* experimental */
-typedef int (*sg_routes_iter_cb)(void *cls, struct sg_route *upld);
+typedef int (*sg_routes_iter_cb)(void *cls, struct sg_route *route);
 
 /* experimental */
 SG_EXTERN void *sg_route_handle(struct sg_route *route);
+
+/* experimental */
+SG_EXTERN void *sg_route_match(struct sg_route *route);
 
 /* experimental */
 SG_EXTERN const char *sg_route_pattern_raw(struct sg_route *route);
@@ -1179,10 +1182,20 @@ SG_EXTERN unsigned int sg_routes_count(struct sg_route *routes);
 struct sg_router;
 
 /* experimental */
+typedef int (*sg_router_dispatch_cb)(void *cls, const char *path, struct sg_route *route);
+
+/* experimental */
+typedef int (*sg_router_match_cb)(void *cls, struct sg_route *route);
+
+/* experimental */
 SG_EXTERN struct sg_router *sg_router_new(struct sg_route *routes);
 
 /* experimental */
 SG_EXTERN void sg_router_free(struct sg_router *router);
+
+/* experimental */
+SG_EXTERN int sg_router_dispatch2(struct sg_router *router, const char *path, void *user_data,
+                                  sg_router_dispatch_cb dispatch_cb, void *cls, sg_router_match_cb match_cb);
 
 /* experimental */
 SG_EXTERN int sg_router_dispatch(struct sg_router *router, const char *path, void *user_data);

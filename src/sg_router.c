@@ -50,24 +50,34 @@ void sg_router_free(struct sg_router *router) {
     sg__free(router);
 }
 
-int sg_router_dispatch(struct sg_router *router, const char *path, void *user_data) {
+int sg_router_dispatch2(struct sg_router *router, const char *path, void *user_data,
+                        sg_router_dispatch_cb dispatch_cb, void *cls, sg_router_match_cb match_cb) {
     struct sg_route *route;
+    int ret;
     if (!router || !path || !router->routes)
         return EINVAL;
     LL_FOREACH(router->routes, route) {
+        if (dispatch_cb && ((ret = dispatch_cb(cls, path, route)) != 0))
+            return ret;
         route->rc =
 #ifdef PCRE2_JIT_SUPPORT
                     pcre2_jit_match
 #else
                     pcre2_match
 #endif
-                                   (route->re, (PCRE2_SPTR) path, strlen(path), 0, 0, route->match_data, NULL);
+                                   (route->re, (PCRE2_SPTR) path, strlen(path), 0, 0, route->match, NULL);
         if (route->rc >= 0) {
             route->path = path;
             route->user_data = user_data;
+            if (match_cb && ((ret = match_cb(cls, route)) != 0))
+                return ret;
             route->cb(route->cls, route);
             return 0;
         }
     }
     return ENOENT;
+}
+
+int sg_router_dispatch(struct sg_router *router, const char *path, void *user_data) {
+    return sg_router_dispatch2(router, path, user_data, NULL, NULL, NULL);
 }
