@@ -1170,13 +1170,13 @@ SG_EXTERN int sg_routes_add(struct sg_route **routes, const char *pattern, sg_ro
 SG_EXTERN int sg_routes_iter(struct sg_route *routes, sg_routes_iter_cb cb, void *cls);
 
 /* experimental */
-SG_EXTERN int sg_routes_clear(struct sg_route **routes);
-
-/* experimental */
 SG_EXTERN int sg_routes_next(struct sg_route **route);
 
 /* experimental */
 SG_EXTERN unsigned int sg_routes_count(struct sg_route *routes);
+
+/* experimental */
+SG_EXTERN int sg_routes_clear(struct sg_route **routes);
 
 /* experimental */
 struct sg_router;
