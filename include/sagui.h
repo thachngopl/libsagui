@@ -1133,6 +1133,9 @@ struct sg_route;
 typedef void (*sg_route_cb)(void *cls, struct sg_route *route);
 
 /* experimental */
+typedef int (*sg_routes_iter_cb)(void *cls, struct sg_route *upld);
+
+/* experimental */
 SG_EXTERN void *sg_route_handle(struct sg_route *route);
 
 /* experimental */
@@ -1161,7 +1164,16 @@ SG_EXTERN int sg_routes_add2(struct sg_route **routes, struct sg_route **route, 
 SG_EXTERN int sg_routes_add(struct sg_route **routes, const char *pattern, sg_route_cb cb, void *cls);
 
 /* experimental */
+SG_EXTERN int sg_routes_iter(struct sg_route *routes, sg_routes_iter_cb cb, void *cls);
+
+/* experimental */
 SG_EXTERN int sg_routes_clear(struct sg_route **routes);
+
+/* experimental */
+SG_EXTERN int sg_routes_next(struct sg_route **route);
+
+/* experimental */
+SG_EXTERN unsigned int sg_routes_count(struct sg_route *routes);
 
 /* experimental */
 struct sg_router;

@@ -227,6 +227,34 @@ int sg_routes_add(struct sg_route **routes, const char *pattern, sg_route_cb cb,
     return ret;
 }
 
+int sg_routes_iter(struct sg_route *routes, sg_routes_iter_cb cb, void *cls) {
+    struct sg_route *tmp;
+    int ret;
+    if (!cb)
+        return EINVAL;
+    if (routes)
+        LL_FOREACH(routes, tmp) {
+            if ((ret = cb(cls, tmp)) != 0)
+                return ret;
+        }
+    return 0;
+}
+
+int sg_routes_next(struct sg_route **route) {
+    if (!route)
+        return EINVAL;
+    *route = (*route) ? (*route)->next : NULL;
+    return 0;
+}
+
+unsigned int sg_routes_count(struct sg_route *routes) {
+    struct sg_route *tmp;
+    unsigned int count = 0;
+    if (routes)
+        LL_COUNT(routes, tmp, count);
+    return count;
+}
+
 int sg_routes_clear(struct sg_route **routes) {
     struct sg_route *route, *tmp;
     if (!routes)
