@@ -43,7 +43,7 @@ static void sg__httperr_cb(__SG_UNUSED void *cls, const char *err) {
 
 static void sg__httpsrv_oel(void *cls, const char *fmt, va_list ap) {
     struct sg_httpsrv *srv = cls;
-    char err[__SG_ERR_SIZE];
+    char err[SG_ERR_SIZE];
     vsnprintf(err, sizeof(err), fmt, ap);
     srv->err_cb(srv->err_cls, err);
 }

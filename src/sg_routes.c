@@ -40,7 +40,7 @@ static void sg__route_free(struct sg_route *route);
 
 static struct sg_route *sg__route_new(const char *pattern, char *errmsg, size_t errlen, sg_route_cb cb, void *cls) {
     struct sg_route *route;
-    PCRE2_UCHAR err[__SG_ERR_SIZE >> 1];
+    PCRE2_UCHAR err[SG_ERR_SIZE >> 1];
     size_t off;
     int errnum;
     if (strstr(pattern, "\\K")) {
@@ -218,7 +218,7 @@ int sg_routes_add2(struct sg_route **routes, struct sg_route **route, const char
 
 int sg_routes_add(struct sg_route **routes, const char *pattern, sg_route_cb cb, void *cls) {
     struct sg_route *route;
-    char err[__SG_ERR_SIZE];
+    char err[SG_ERR_SIZE];
     int ret;
     if ((ret = sg_routes_add2(routes, &route, pattern, err, sizeof(err), cb, cls)) != 0)
         sg__routes_err_cb(cls, err);
