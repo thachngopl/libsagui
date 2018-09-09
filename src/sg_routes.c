@@ -40,7 +40,7 @@ static void sg__route_free(struct sg_route *route);
 
 static struct sg_route *sg__route_new(const char *pattern, char *errmsg, size_t errlen, sg_route_cb cb, void *cls) {
     struct sg_route *route;
-    PCRE2_UCHAR *err;
+    PCRE2_UCHAR err[__SG_ERR_SIZE >> 1];
     size_t off;
     int errnum;
     if (strstr(pattern, "\\K")) {
@@ -56,28 +56,22 @@ static struct sg_route *sg__route_new(const char *pattern, char *errmsg, size_t 
     snprintf(route->pattern, off, "^%s$", pattern);
     if (!(route->re = pcre2_compile((PCRE2_SPTR) route->pattern, PCRE2_ZERO_TERMINATED, PCRE2_CASELESS,
                                     &errnum, &off, NULL))) {
-#define SG__ERR_SIZE 120
-        sg__alloc(err, SG__ERR_SIZE);
-        if (pcre2_get_error_message(errnum, err, SG__ERR_SIZE) == PCRE2_ERROR_NOMEMORY)
+        if (pcre2_get_error_message(errnum, err, sizeof(err)) == PCRE2_ERROR_NOMEMORY)
             oom();
         snprintf(errmsg, errlen, _("Pattern compilation failed at offset %d: %s.\n"), (unsigned int) off, err);
-        sg__free(err);
         sg__route_free(route);
         return NULL;
     }
 #ifdef PCRE2_JIT_SUPPORT
     errnum = pcre2_jit_compile(route->re, PCRE2_JIT_COMPLETE);
     if (errnum < 0) {
-        sg__alloc(err, SG__ERR_SIZE);
-        if (pcre2_get_error_message(errnum, err, SG__ERR_SIZE) == PCRE2_ERROR_NOMEMORY)
+        if (pcre2_get_error_message(errnum, err, sizeof(err)) == PCRE2_ERROR_NOMEMORY)
             oom();
         snprintf(errmsg, errlen, _("JIT compilation failed: %s.\n"), err);
-        sg__free(err);
         sg__route_free(route);
         return NULL;
     }
 #endif
-#undef SG__ERR_SIZE
     if (!(route->match = pcre2_match_data_create_from_pattern(route->re, NULL))) {
         strncpy(errmsg, _("Cannot allocate match data from the pattern.\n"), errlen);
         sg__route_free(route);
@@ -224,14 +218,10 @@ int sg_routes_add2(struct sg_route **routes, struct sg_route **route, const char
 
 int sg_routes_add(struct sg_route **routes, const char *pattern, sg_route_cb cb, void *cls) {
     struct sg_route *route;
-    char *err;
+    char err[__SG_ERR_SIZE];
     int ret;
-#define SG__ERR_SIZE 256
-    sg__alloc(err, SG__ERR_SIZE);
-    if ((ret = sg_routes_add2(routes, &route, pattern, err, SG__ERR_SIZE, cb, cls)) != 0)
-#undef SG__ERR_SIZE
+    if ((ret = sg_routes_add2(routes, &route, pattern, err, sizeof(err), cb, cls)) != 0)
         sg__routes_err_cb(cls, err);
-    sg__free(err);
     return ret;
 }
 

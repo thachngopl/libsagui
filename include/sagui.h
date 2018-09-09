@@ -73,6 +73,10 @@ extern "C" {
 #define __SG_FORMAT(...) __attribute__((format(printf, __VA_ARGS__)))
 #endif
 
+#ifndef __SG_ERR_SIZE
+#define __SG_ERR_SIZE 256
+#endif
+
 #define SG_VERSION_MAJOR 1
 #define SG_VERSION_MINOR 0
 #define SG_VERSION_PATCH 3
