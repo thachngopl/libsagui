@@ -110,7 +110,7 @@ void *sg_route_match(struct sg_route *route) {
     return route->match;
 }
 
-const char *sg_route_pattern_raw(struct sg_route *route) {
+const char *sg_route_rawpattern(struct sg_route *route) {
     if (!route) {
         errno = EINVAL;
         return NULL;
