@@ -54,17 +54,17 @@ int main(void) {
     r2 = sg_router_new(rts2);
 
     entrypoints = sg_entrypoints_new();
-    sg_entrypoints_add(entrypoints, r1, "/r1");
-    sg_entrypoints_add(entrypoints, r2, "/r2");
+    sg_entrypoints_add(entrypoints, "/r1", r1);
+    sg_entrypoints_add(entrypoints, "/r2", r2);
 
     entrypoint = sg_entrypoints_find("/r1/foo");
-    sg_router_dispatch(sg_entrypoint_router(entrypoint), sg_entrypoint_path(entrypoint), NULL);
+    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), sg_entrypoint_path(entrypoint), NULL);
     entrypoint = sg_entrypoints_find("/r1/bar");
-    sg_router_dispatch(sg_entrypoint_router(entrypoint), sg_entrypoint_path(entrypoint), NULL);
+    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), sg_entrypoint_path(entrypoint), NULL);
     entrypoint = sg_entrypoints_find("/r2/foo");
-    sg_router_dispatch(sg_entrypoint_router(entrypoint), sg_entrypoint_path(entrypoint), NULL);
+    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), sg_entrypoint_path(entrypoint), NULL);
     entrypoint = sg_entrypoints_find("/r2/bar");
-    sg_router_dispatch(sg_entrypoint_router(entrypoint), sg_entrypoint_path(entrypoint), NULL);
+    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), sg_entrypoint_path(entrypoint), NULL);
 
     sg_router_free(r1);
     sg_router_free(r2);

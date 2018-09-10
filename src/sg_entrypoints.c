@@ -32,10 +32,10 @@ struct sg_entrypoints *sg_entrypoints_new(void) {
     return NULL;
 }
 
-int sg_entrypoints_add(struct sg_entrypoints *entrypoints, struct sg_router *router, const char *entrypoint) {
+int sg_entrypoints_add(struct sg_entrypoints *entrypoints, const char *entrypoint, void *user_data) {
     (void) entrypoints;
-    (void) router;
     (void) entrypoint;
+    (void) user_data;
     return 0;
 }
 

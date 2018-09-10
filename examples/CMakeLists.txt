@@ -72,7 +72,10 @@ if (SG_BUILD_EXAMPLES)
                 router_simple
                 router_segments
                 router_vars
-                router_srv
+                router_srv)
+    endif ()
+    if (SG_ENTRY_POINTS)
+        list(APPEND SG_EXAMPLES
                 entrypoint)
     endif ()
     set(SG_EXAMPLES ${SG_EXAMPLES} PARENT_SCOPE)

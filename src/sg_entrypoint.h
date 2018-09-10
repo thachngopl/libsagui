@@ -31,7 +31,7 @@
 #include "sagui.h"
 
 struct sg_entrypoint {
-    struct sg_router *router;
+    void *user_data;
 };
 
 #endif /* SG_ENTRYPOINT_H */

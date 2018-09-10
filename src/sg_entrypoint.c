@@ -32,7 +32,7 @@ const char *sg_entrypoint_path(struct sg_entrypoint *entrypoint) {
     return NULL;
 }
 
-struct sg_router *sg_entrypoint_router(struct sg_entrypoint *entrypoint) {
+void *sg_entrypoint_user_data(struct sg_entrypoint *entrypoint) {
     (void) entrypoint;
     return NULL;
 }
