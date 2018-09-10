@@ -64,7 +64,9 @@ list(APPEND SG_C_SOURCE
 if (SG_PATH_ROUTING)
     list(APPEND SG_C_SOURCE
             ${SG_SOURCE_DIR}/sg_routes.c
-            ${SG_SOURCE_DIR}/sg_router.c)
+            ${SG_SOURCE_DIR}/sg_router.c
+            ${SG_SOURCE_DIR}/sg_entrypoint.c
+            ${SG_SOURCE_DIR}/sg_entrypoints.c)
 endif ()
 set(SG_C_SOURCE ${SG_C_SOURCE} PARENT_SCOPE)
 

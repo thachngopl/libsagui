@@ -1210,6 +1210,30 @@ SG_EXTERN int sg_router_dispatch2(struct sg_router *router, const char *path, vo
 /* experimental */
 SG_EXTERN int sg_router_dispatch(struct sg_router *router, const char *path, void *user_data);
 
+/* experimental */
+struct sg_entrypoint;
+
+/* experimental */
+SG_EXTERN const char *sg_entrypoint_path(struct sg_entrypoint *entrypoint);
+
+/* experimental */
+SG_EXTERN struct sg_router *sg_entrypoint_router(struct sg_entrypoint *entrypoint);
+
+/* experimental */
+struct sg_entrypoints;
+
+/* experimental */
+SG_EXTERN struct sg_entrypoints *sg_entrypoints_new(void);
+
+/* experimental */
+SG_EXTERN int sg_entrypoints_add(struct sg_entrypoints *entrypoints, struct sg_router *router, const char *entrypoint);
+
+/* experimental */
+SG_EXTERN void sg_entrypoints_free(struct sg_entrypoints *entrypoints);
+
+/* experimental */
+SG_EXTERN struct sg_entrypoint *sg_entrypoints_find(const char *path);
+
 #endif
 
 #ifdef __cplusplus
