@@ -29,8 +29,10 @@
 #define SG_ENTRYPOINTS_H
 
 #include "sg_entrypoint.h"
+#include "sagui.h"
 
 struct sg_entrypoints {
+    struct sg_entrypoint *list;
     unsigned int count;
 };
 

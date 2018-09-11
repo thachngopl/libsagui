@@ -25,14 +25,31 @@
  * along with Sagui library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+#include <errno.h>
 #include "sg_entrypoint.h"
 
-const char *sg_entrypoint_path(struct sg_entrypoint *entrypoint) {
-    (void) entrypoint;
-    return NULL;
+void sg__entrypoint_prepare(struct sg_entrypoint *entrypoint, char *name, void *user_data) {
+    entrypoint->name = name;
+    entrypoint->user_data = user_data;
+}
+
+int sg__entrypoint_cmp(const void *a, const void *b) {
+    return strcmp(((struct sg_entrypoint *) a)->name, ((struct sg_entrypoint *) b)->name);
+}
+
+const char *sg_entrypoint_name(struct sg_entrypoint *entrypoint) {
+    if (!entrypoint) {
+        errno = EINVAL;
+        return NULL;
+    }
+    return entrypoint->name;
 }
 
 void *sg_entrypoint_user_data(struct sg_entrypoint *entrypoint) {
-    (void) entrypoint;
-    return NULL;
+    if (!entrypoint) {
+        errno = EINVAL;
+        return NULL;
+    }
+    return entrypoint->user_data;
 }

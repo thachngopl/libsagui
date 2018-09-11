@@ -28,10 +28,16 @@
 #ifndef SG_ENTRYPOINT_H
 #define SG_ENTRYPOINT_H
 
+#include "sg_macros.h"
 #include "sagui.h"
 
 struct sg_entrypoint {
+    char *name;
     void *user_data;
 };
+
+SG__EXTERN void sg__entrypoint_prepare(struct sg_entrypoint *entrypoint, char *name, void *user_data);
+
+SG__EXTERN int sg__entrypoint_cmp(const void *a, const void *b);
 
 #endif /* SG_ENTRYPOINT_H */

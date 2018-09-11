@@ -1221,7 +1221,7 @@ SG_EXTERN int sg_router_dispatch(struct sg_router *router, const char *path, voi
 struct sg_entrypoint;
 
 /* experimental */
-SG_EXTERN const char *sg_entrypoint_path(struct sg_entrypoint *entrypoint);
+SG_EXTERN const char *sg_entrypoint_name(struct sg_entrypoint *entrypoint);
 
 /* experimental */
 SG_EXTERN void *sg_entrypoint_user_data(struct sg_entrypoint *entrypoint);
@@ -1236,10 +1236,14 @@ SG_EXTERN struct sg_entrypoints *sg_entrypoints_new(void);
 SG_EXTERN void sg_entrypoints_free(struct sg_entrypoints *entrypoints);
 
 /* experimental */
-SG_EXTERN int sg_entrypoints_add(struct sg_entrypoints *entrypoints, const char *entrypoint, void *user_data);
+SG_EXTERN int sg_entrypoints_add(struct sg_entrypoints *entrypoints, const char *path, void *user_data);
 
 /* experimental */
-SG_EXTERN struct sg_entrypoint *sg_entrypoints_find(const char *path);
+SG_EXTERN int sg_entrypoints_clear(struct sg_entrypoints *entrypoints);
+
+/* experimental */
+SG_EXTERN int sg_entrypoints_find(struct sg_entrypoints *entrypoints, struct sg_entrypoint **entrypoint,
+                                  const char *path);
 
 #endif
 
