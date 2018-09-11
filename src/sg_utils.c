@@ -256,6 +256,26 @@ bool sg_is_post(const char *method) {
     return false;
 }
 
+char *sg_extract_entrypoint(const char *path) {
+    char *str;
+    size_t len;
+    unsigned int start, end;
+    if (!path) {
+        errno = EINVAL;
+        return NULL;
+    }
+    len = strlen(path);
+    start = (*path == '/') ? 1 : 0;
+    for (end = start; end < len; end++)
+        if (path[end] == '/')
+            break;
+    len = (end - start) + 1;
+    str = sg__malloc(len + 1);
+    snprintf(str, len + 1, "/%s", start + path);
+    str[len] = '\0';
+    return str;
+}
+
 /* File/directory. */
 
 char *sg_tmpdir() {

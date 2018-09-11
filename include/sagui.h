@@ -202,6 +202,9 @@ SG_EXTERN char *sg_strerror(int errnum, char *errmsg, size_t errlen);
  */
 SG_EXTERN bool sg_is_post(const char *method);
 
+/* experimental */
+SG_EXTERN char *sg_extract_entrypoint(const char *path);
+
 /**
  * Returns the system temporary directory.
  * \return Temporary directory as null-terminated string.
