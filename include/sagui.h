@@ -1180,6 +1180,9 @@ SG_EXTERN int sg_routes_add2(struct sg_route **routes, struct sg_route **route, 
 SG_EXTERN int sg_routes_add(struct sg_route **routes, const char *pattern, sg_route_cb cb, void *cls);
 
 /* experimental */
+SG_EXTERN int sg_routes_rm(struct sg_route **routes, const char *pattern);
+
+/* experimental */
 SG_EXTERN int sg_routes_iter(struct sg_route *routes, sg_routes_iter_cb cb, void *cls);
 
 /* experimental */

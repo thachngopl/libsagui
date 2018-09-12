@@ -225,6 +225,20 @@ int sg_routes_add(struct sg_route **routes, const char *pattern, sg_route_cb cb,
     return ret;
 }
 
+int sg_routes_rm(struct sg_route **routes, const char *pattern) {
+    struct sg_route *route, *tmp;
+    if (!routes || !pattern)
+        return EINVAL;
+    LL_FOREACH_SAFE(*routes, route, tmp) {
+        if (strncmp(pattern, route->pattern + 1, strlen(pattern)) != 0)
+            continue;
+        LL_DELETE(*routes, route);
+        sg__route_free(route);
+        return 0;
+    }
+    return ENOENT;
+}
+
 int sg_routes_iter(struct sg_route *routes, sg_routes_iter_cb cb, void *cls) {
     struct sg_route *tmp;
     int ret;
