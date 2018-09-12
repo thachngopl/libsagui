@@ -1224,6 +1224,9 @@ struct sg_entrypoint;
 SG_EXTERN const char *sg_entrypoint_name(struct sg_entrypoint *entrypoint);
 
 /* experimental */
+SG_EXTERN int sg_entrypoint_set_user_data(struct sg_entrypoint *entrypoint, void *user_data);
+
+/* experimental */
 SG_EXTERN void *sg_entrypoint_user_data(struct sg_entrypoint *entrypoint);
 
 /* experimental */

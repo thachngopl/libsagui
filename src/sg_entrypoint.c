@@ -46,6 +46,13 @@ const char *sg_entrypoint_name(struct sg_entrypoint *entrypoint) {
     return entrypoint->name;
 }
 
+int sg_entrypoint_set_user_data(struct sg_entrypoint *entrypoint, void *user_data) {
+    if (!entrypoint)
+        return EINVAL;
+    entrypoint->user_data = user_data;
+    return 0;
+}
+
 void *sg_entrypoint_user_data(struct sg_entrypoint *entrypoint) {
     if (!entrypoint) {
         errno = EINVAL;
