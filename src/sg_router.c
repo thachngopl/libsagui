@@ -46,7 +46,7 @@ struct sg_router *sg_router_new(struct sg_route *routes) {
 void sg_router_free(struct sg_router *router) {
     if (!router)
         return;
-    sg_routes_clear(&router->routes);
+    sg_routes_cleanup(&router->routes);
     sg__free(router);
 }
 

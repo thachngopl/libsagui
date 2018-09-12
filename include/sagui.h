@@ -1189,7 +1189,7 @@ SG_EXTERN int sg_routes_next(struct sg_route **route);
 SG_EXTERN unsigned int sg_routes_count(struct sg_route *routes);
 
 /* experimental */
-SG_EXTERN int sg_routes_clear(struct sg_route **routes);
+SG_EXTERN int sg_routes_cleanup(struct sg_route **routes);
 
 /* experimental */
 struct sg_router;

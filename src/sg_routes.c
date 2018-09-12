@@ -253,7 +253,7 @@ unsigned int sg_routes_count(struct sg_route *routes) {
     return count;
 }
 
-int sg_routes_clear(struct sg_route **routes) {
+int sg_routes_cleanup(struct sg_route **routes) {
     struct sg_route *route, *tmp;
     if (!routes)
         return EINVAL;
