@@ -1236,10 +1236,17 @@ SG_EXTERN struct sg_entrypoints *sg_entrypoints_new(void);
 SG_EXTERN void sg_entrypoints_free(struct sg_entrypoints *entrypoints);
 
 /* experimental */
+SG_EXTERN int sg_entrypoints_add2(struct sg_entrypoints *entrypoints, const char *name, void *user_data);
+
+/* experimental */
 SG_EXTERN int sg_entrypoints_add(struct sg_entrypoints *entrypoints, const char *path, void *user_data);
 
 /* experimental */
 SG_EXTERN int sg_entrypoints_clear(struct sg_entrypoints *entrypoints);
+
+/* experimental */
+SG_EXTERN int sg_entrypoints_find2(struct sg_entrypoints *entrypoints, struct sg_entrypoint **entrypoint,
+                                   const char *name);
 
 /* experimental */
 SG_EXTERN int sg_entrypoints_find(struct sg_entrypoints *entrypoints, struct sg_entrypoint **entrypoint,

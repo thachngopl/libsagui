@@ -32,10 +32,6 @@
 
 /* NOTE: Error checking has been omitted for clarity. */
 
-static const char *get_path(struct sg_entrypoint *entrypoint, const char *url) {
-    return strlen(sg_entrypoint_name(entrypoint)) + url;
-}
-
 static void r1_route_cb(void *cls, struct sg_route *route) {
     fprintf(stdout, "%s: %s\n", sg_route_path(route), (const char *) cls);
     fflush(stdout);
@@ -63,13 +59,13 @@ int main(void) {
     sg_entrypoints_add(entrypoints, "/r2", r2);
 
     sg_entrypoints_find(entrypoints, &entrypoint, "/r1/foo");
-    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), get_path(entrypoint, "/r1/foo"), NULL);
+    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), "/foo", NULL);
     sg_entrypoints_find(entrypoints, &entrypoint, "/r1/bar");
-    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), get_path(entrypoint, "/r1/bar"), NULL);
+    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), "/bar", NULL);
     sg_entrypoints_find(entrypoints, &entrypoint, "/r2/foo");
-    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), get_path(entrypoint, "/r2/foo"), NULL);
+    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), "/foo", NULL);
     sg_entrypoints_find(entrypoints, &entrypoint, "/r2/bar");
-    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), get_path(entrypoint, "/r2/bar"), NULL);
+    sg_router_dispatch(sg_entrypoint_user_data(entrypoint), "/bar", NULL);
 
     sg_router_free(r1);
     sg_router_free(r2);

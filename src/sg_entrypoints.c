@@ -31,6 +31,24 @@
 #include "sg_entrypoints.h"
 #include "sagui.h"
 
+static int sg__entrypoints_add(struct sg_entrypoints *entrypoints, struct sg_entrypoint *entrypoint, void *user_data) {
+    if (bsearch(entrypoint, entrypoints->list, entrypoints->count, sizeof(struct sg_entrypoint), sg__entrypoint_cmp))
+        return EALREADY;
+    if (!(entrypoints->list = sg__realloc(entrypoints->list, (entrypoints->count + 1) * sizeof(struct sg_entrypoint))))
+        return ENOMEM;
+    sg__entrypoint_prepare(entrypoints->list + entrypoints->count++, entrypoint->name, user_data);
+    qsort(entrypoints->list, entrypoints->count, sizeof(struct sg_entrypoint), sg__entrypoint_cmp);
+    return 0;
+}
+
+static int sg__entrypoints_find(struct sg_entrypoints *entrypoints, struct sg_entrypoint *key,
+                                struct sg_entrypoint **entrypoint) {
+    if ((entrypoints->count > 0) && (*entrypoint = bsearch(key, entrypoints->list, entrypoints->count,
+                                                           sizeof(struct sg_entrypoint), sg__entrypoint_cmp)))
+        return 0;
+    return ENOENT;
+}
+
 struct sg_entrypoints *sg_entrypoints_new(void) {
     return sg_alloc(sizeof(struct sg_entrypoints));
 }
@@ -40,29 +58,27 @@ void sg_entrypoints_free(struct sg_entrypoints *entrypoints) {
     sg__free(entrypoints);
 }
 
+int sg_entrypoints_add2(struct sg_entrypoints *entrypoints, const char *name, void *user_data) {
+    struct sg_entrypoint entrypoint;
+    int ret;
+    if (!entrypoints || !name)
+        return EINVAL;
+    if (!(entrypoint.name = strdup(name)))
+        return ENOMEM;
+    if ((ret = sg__entrypoints_add(entrypoints, &entrypoint, user_data) != 0))
+        sg__free(entrypoint.name);
+    return ret;
+}
+
 int sg_entrypoints_add(struct sg_entrypoints *entrypoints, const char *path, void *user_data) {
-    struct sg_entrypoint key;
+    struct sg_entrypoint entrypoint;
     int ret;
     if (!entrypoints || !path)
         return EINVAL;
-    if (!(key.name = sg_extract_entrypoint(path)))
+    if (!(entrypoint.name = sg_extract_entrypoint(path)))
         return ENOMEM;
-    if (bsearch(&key, entrypoints->list, entrypoints->count, sizeof(struct sg_entrypoint), sg__entrypoint_cmp)) {
-        ret = EALREADY;
-        goto fail;
-    }
-    if (!(entrypoints->list = sg__realloc(entrypoints->list,
-                                          (entrypoints->count + 1) * sizeof(struct sg_entrypoint)))) {
-        ret = ENOMEM;
-        goto fail;
-    }
-    sg__entrypoint_prepare(entrypoints->list + entrypoints->count++, key.name, user_data);
-    qsort(entrypoints->list, entrypoints->count, sizeof(struct sg_entrypoint), sg__entrypoint_cmp);
-    return 0;
-fail:
-    sg__free(key.name);
-    if (ret == ENOMEM)
-        oom();
+    if ((ret = sg__entrypoints_add(entrypoints, &entrypoint, user_data) != 0))
+        sg__free(entrypoint.name);
     return ret;
 }
 
@@ -77,17 +93,26 @@ int sg_entrypoints_clear(struct sg_entrypoints *entrypoints) {
     return 0;
 }
 
+int sg_entrypoints_find2(struct sg_entrypoints *entrypoints, struct sg_entrypoint **entrypoint, const char *name) {
+    struct sg_entrypoint key;
+    int ret;
+    if (!entrypoints || !entrypoint || !name)
+        return EINVAL;
+    if (!(key.name = strdup(name)))
+        return ENOMEM;
+    ret = sg__entrypoints_find(entrypoints, &key, entrypoint);
+    sg__free(key.name);
+    return ret;
+}
+
 int sg_entrypoints_find(struct sg_entrypoints *entrypoints, struct sg_entrypoint **entrypoint, const char *path) {
     struct sg_entrypoint key;
-    int ret = ENOENT;
+    int ret;
     if (!entrypoints || !entrypoint || !path)
         return EINVAL;
     if (!(key.name = sg_extract_entrypoint(path)))
         return ENOMEM;
-    if ((entrypoints->count > 0) &&
-        (*entrypoint = bsearch(&key, entrypoints->list, entrypoints->count, sizeof(struct sg_entrypoint),
-                               sg__entrypoint_cmp)))
-        ret = 0;
+    ret = sg__entrypoints_find(entrypoints, &key, entrypoint);
     sg__free(key.name);
     return ret;
 }
