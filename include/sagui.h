@@ -1248,6 +1248,12 @@ SG_EXTERN int sg_entrypoints_add2(struct sg_entrypoints *entrypoints, const char
 SG_EXTERN int sg_entrypoints_add(struct sg_entrypoints *entrypoints, const char *path, void *user_data);
 
 /* experimental */
+SG_EXTERN int sg_entrypoints_rm2(struct sg_entrypoints *entrypoints, const char *name);
+
+/* experimental */
+SG_EXTERN int sg_entrypoints_rm(struct sg_entrypoints *entrypoints, const char *path);
+
+/* experimental */
 SG_EXTERN int sg_entrypoints_clear(struct sg_entrypoints *entrypoints);
 
 /* experimental */

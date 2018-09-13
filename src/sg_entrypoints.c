@@ -41,6 +41,21 @@ static int sg__entrypoints_add(struct sg_entrypoints *entrypoints, struct sg_ent
     return 0;
 }
 
+static int sg__entrypoints_rm(struct sg_entrypoints *entrypoints, const char *name) {
+    struct sg_entrypoint *entrypoint;
+    for (unsigned int i = 0; i < entrypoints->count; i++) {
+        entrypoint = entrypoints->list + i;
+        if (strcmp(entrypoint->name, name) == 0) {
+            entrypoints->count--;
+            sg__free(entrypoint->name);
+            memcpy(entrypoint, entrypoint + 1, (entrypoints->count - i) * sizeof(struct sg_entrypoint));
+            entrypoints->list = sg__realloc(entrypoints->list, entrypoints->count * sizeof(struct sg_entrypoint));
+            return 0;
+        }
+    }
+    return ENOENT;
+}
+
 static int sg__entrypoints_find(struct sg_entrypoints *entrypoints, struct sg_entrypoint *key,
                                 struct sg_entrypoint **entrypoint) {
     if ((entrypoints->count > 0) && (*entrypoint = bsearch(key, entrypoints->list, entrypoints->count,
@@ -79,6 +94,24 @@ int sg_entrypoints_add(struct sg_entrypoints *entrypoints, const char *path, voi
         return ENOMEM;
     if ((ret = sg__entrypoints_add(entrypoints, &entrypoint, user_data) != 0))
         sg__free(entrypoint.name);
+    return ret;
+}
+
+int sg_entrypoints_rm2(struct sg_entrypoints *entrypoints, const char *name) {
+    if (!entrypoints || !name)
+        return EINVAL;
+    return sg__entrypoints_rm(entrypoints, name);
+}
+
+int sg_entrypoints_rm(struct sg_entrypoints *entrypoints, const char *path) {
+    char *name;
+    int ret;
+    if (!entrypoints || !path)
+        return EINVAL;
+    if (!(name = sg_extract_entrypoint(path)))
+        return ENOMEM;
+    ret = sg__entrypoints_rm(entrypoints, name);
+    sg__free(name);
     return ret;
 }
 
